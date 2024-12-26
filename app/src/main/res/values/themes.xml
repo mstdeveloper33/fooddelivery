@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.FoodDelivery" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.FoodDelivery</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
+    </style>
 </resources>
