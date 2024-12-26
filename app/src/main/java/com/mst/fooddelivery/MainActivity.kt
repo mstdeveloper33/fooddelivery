@@ -2,11 +2,13 @@ package com.mst.fooddelivery
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -16,15 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mst.fooddelivery.data.FoodApi
+import com.mst.fooddelivery.ui.features.auth.AuthScreen
 import com.mst.fooddelivery.ui.theme.FoodDeliveryTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.math.log
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     var showSplashScreen = true
+    @Inject //burada retrofit yapımız çalışıyormu diye kontrol ediyoruz
+    lateinit var foodApi: FoodApi
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -63,13 +72,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodDeliveryTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                   Box(modifier = Modifier.padding(innerPadding)) {}
+                    AuthScreen()
                 }
             }
         }
+        //burada retrofit yapımız çalışıyormu diye kontrol ediyoruz
+        if (::foodApi.isInitialized) {
+            Log.d("MainActivity", "Retrofit is initialized")
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             showSplashScreen = false
